@@ -15,7 +15,7 @@ body{
 
 
 nav{
-  background-color: rgb(228, 32, 32);
+  background-color: rgba(255, 200, 155, 0.724);
   box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
 }
 
@@ -41,7 +41,7 @@ nav a{
 }
 
 nav a:hover{
-  background-color: rgba(239, 117, 24, 0.242);
+  background-color: rgba(255, 204, 165, 0.242);
 }
 
 nav li:first-child{
@@ -78,7 +78,7 @@ button{
   border: 0px;
 }
 
-h1{
+.reload{
   text-align: center;
   position: absolute;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
