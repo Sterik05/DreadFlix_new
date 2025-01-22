@@ -1,14 +1,17 @@
 <template>
+    <router-link to="/movies" class="back">
+            <img src="C:\Users\ricca\OneDrive\Desktop\PCTO\progetti finali\DreadFlix\dread-flix\public\freccia.svg" alt="Home" class="home-icon" ></img>
+    </router-link>
     <section v-if="movie" class="movie">
         <h1 class="title">{{ movie.original_title }}</h1>
         <div class="movie-details">
             <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title">
-        <div class="movie-info">
-            <p class="movie-description">{{ movie.overview }}</p>
-            <p><strong>Language:</strong> {{ movie.original_language }}</p>
-            <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
-            <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
-        </div>
+            <div class="movie-info">
+                <p class="movie-description">{{ movie.overview }}</p>
+                <p><strong>Language:</strong> {{ movie.original_language }}</p>
+                <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+                <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
+            </div>
         </div>
     </section>
 </template>
@@ -59,38 +62,57 @@ export default {
 }
 </script>
 
-
-
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 .movie {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #293133;
+  font-family: 'Bebas Neue', sans-serif;
+  color: #fff;
+  min-height: 100vh; 
+}
+
+.back {
+  margin-bottom: 20px; /* Spazio tra il link e il titolo */
+}
+
+.home-icon {
+  width: 60px; /* Dimensione dell'icona */
+  height: 60px; /* Dimensione dell'icona */
 }
 
 .movie-details {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+  gap: 20px; 
 }
 
 .movie-info {
-    margin-left: 20px;
+  text-align: left;
 }
 
 .movie img {
-    max-width: 200px; /* Dimensione massima per l'immagine */
-    border-radius: 8px; /* Angoli arrotondati per l'immagine */
+  max-width: 280px; 
+  border-radius: 8px; 
+  margin-right: 20px; 
 }
 
 .title {
-    font-size: 2em;
-    margin-bottom: 10px;
+  font-size: 5em; 
+  margin-bottom: 10px;
 }
 
 .movie-description {
-    max-width: 400px; /* Larghezza massima per la descrizione */
-    text-align: justify; /* Giustifica il testo */
+  max-width: 700px; 
+  text-align: justify; 
+  line-height: 1.6; 
+  margin-top: 10px; 
+  font-size: 1.5em;
 }
 </style>

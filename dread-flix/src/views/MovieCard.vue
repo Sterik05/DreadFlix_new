@@ -21,51 +21,58 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .card-container {
-    display: flex; /* Utilizza Flexbox per il layout */
-    flex-wrap: wrap; /* Permette alle card di andare a capo se non c'è spazio */
-    justify-content: space-around; /* Spaziatura uniforme tra le card */
-    margin: 20px; /* Margine esterno per il contenitore */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px; /* Spazio tra le card */
+    padding: 16px; /* Padding del contenitore */
 }
 
 .card-link {
-    text-decoration: none; /* Rimuove la sottolineatura dal link */
+    text-decoration: none; /* Rimuove la sottolineatura */
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ccc; /* Bordo per la card */
-    border-radius: 8px; /* Angoli arrotondati */
+    background-color: #2c2c2c; /* Colore di sfondo della card */
+}
+
+.card:hover{
+    border-radius: 12px; /* Angoli arrotondati */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Ombra della card */
     overflow: hidden; /* Nasconde il contenuto che esce dai bordi */
-    transition: transform 0.2s; /* Transizione per l'effetto hover */
-    margin: 10px; /* Margine tra le card */
-    max-width: 200px; /* Larghezza massima per la card */
+    transition: transform 0.2s, box-shadow 0.2s; /* Transizione per l'effetto hover */
 }
 
 .card:hover {
-    transform: scale(1.05); /* Effetto di ingrandimento al passaggio del mouse */
+    transform: scale(1.02); /* Effetto di ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 20px rgb(255, 0, 0); /* Ombra più intensa al passaggio del mouse */
 }
 
 .image {
-    width: 100%; /* L'immagine occupa tutta la larghezza della card */
-    height: auto; /* Mantiene le proporzioni dell'immagine */
+    width: 100%; /* Immagine a larghezza piena */
+    height: auto; /* Altezza automatica per mantenere le proporzioni */
+    border-bottom: 4px solid #ba2323; /* Bordo inferiore per l'immagine */
 }
 
 .card-content {
-    padding: 10px; /* Padding interno per il contenuto della card */
+    padding: 16px; /* Padding interno della card */
+    color: #ffffff; /* Colore del testo */
+    font-family: 'Roboto', sans-serif; /* Font importato */
 }
 
 .card-title {
-    font-size: 1.2em; /* Dimensione del titolo */
+    font-size: 1.4em; /* Dimensione del titolo */
     margin: 0; /* Rimuove il margine */
+    font-weight: bold; /* Grassetto per il titolo */
 }
 
 .card-popularity,
 .card-vote,
 .card-language {
-    margin: 5px 0; /* Margine verticale per i paragrafi */
+    margin: 4px 0; /* Margine verticale per i paragrafi */
     font-size: 0.9em; /* Dimensione del testo per le informazioni */
+    color: #cccccc; /* Colore del testo per le informazioni */
+    font-family: 'Roboto', sans-serif; /* Font per le informazioni */
 }
 </style>
