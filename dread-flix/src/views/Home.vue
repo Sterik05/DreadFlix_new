@@ -8,7 +8,7 @@
         />
         <div class="movies">
             <MovieCard
-                v-for="movie in filteredMovies"
+                v-for="movie in displayedMovies"
                 :key="movie.id"
                 :movie="movie">
             </MovieCard>
@@ -24,7 +24,11 @@ export default {
     data() {
         return {
             movies: [],
-            searchQuery: '' // Aggiungi una proprietà per la query di ricerca
+            searchQuery: '', // Aggiungi una proprietà per la query di ricerca
+            currentPage: 1,
+            totalPages: 0,
+            maxMovies: 5,
+            thresholdOffset: 200
         };
     },
     computed: {
@@ -33,10 +37,13 @@ export default {
             return this.movies.filter(movie => {
                 return movie.title.toLowerCase().includes(this.searchQuery.toLowerCase());
             });
+        },
+        displayedMovies() {
+            return this.filteredMovies;
         }
     },
     methods: {
-        getMovies() {
+        getMovies(page = 1) {
             const options = {
                 method: 'GET',
                 headers: {
@@ -45,7 +52,7 @@ export default {
                 }
             };
 
-            fetch('https://api.themoviedb.org/3/movie/popular?language=en&page=1', options)
+            fetch(`https://api.themoviedb.org/3/movie/popular?language=en&page=${page}`, options)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -53,15 +60,39 @@ export default {
                     return response.json();
                 })
                 .then(data => {
-                    this.movies = data.results;
+                    if (data.results) {
+                        if (page === 1)
+                        {
+                            this.movies = data.results;
+                        } else {
+                            const limitedResults = data.results.slice(0, this.maxMovies);
+                            this.movies = [...this.movies, ...limitedResults];
+                        }
+                        this.totalPages = data.total_pages;
+                    } else {
+                        console.warn('No results found for page:', page );
+                    }
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
+        },
+        handleScroll() {
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const threshold = document.body.offsetHeight - this.thresholdOffset;
+
+            if (scrollPosition >= threshold && this.currentPage < this.totalPages) {
+                this.currentPage++;
+                this.getMovies(this.currentPage); // Carica la pagina successiva
+            }
         }
     },
     mounted() {
-        this.getMovies();
+        this.getMovies(); // Carica i film della prima pagina
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    beforeUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 }
 </script>

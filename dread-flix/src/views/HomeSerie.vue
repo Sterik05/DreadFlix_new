@@ -24,7 +24,11 @@ export default {
     data() {
         return {
             series: [],
-            searchQuery: '' // Aggiungi una proprietà per la query di ricerca
+            searchQuery: '', // Aggiungi una proprietà per la query di ricerca
+            currentPage: 1, 
+            totalPages: 0, 
+            maxSeriesPerLoad: 5,
+            thresholdOffset: 200
         };
     },
     computed: {
@@ -36,7 +40,7 @@ export default {
         }
     },
     methods: {
-        getSeries() {
+        getSeries(page = 1) {
             const options = {
                 method: 'GET',
                 headers: {
@@ -45,7 +49,7 @@ export default {
                 }
             };
 
-            fetch('https://api.themoviedb.org/3/trending/tv/day?language=en-US', options)
+            fetch(`https://api.themoviedb.org/3/trending/tv/day?language=en-US&page=${page}`, options)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -53,17 +57,37 @@ export default {
                     return response.json();
                 })
                 .then(data => {
-                    this.series = data.results;
+                    if (page === 1) {
+                        this.series = data.results;
+                    } else {
+                        this.series = [...this.series, ...data.results.slice(0, this.maxSeriesPerLoad)];
+                    }
+                    this.totalPages = data.total_pages; // Imposta il totale delle pagine
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
-                });
+                })
+        },
+        handleScroll() {
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const threshold = document.body.offsetHeight - this.thresholdOffset;
+
+            if (scrollPosition >= threshold && !this.loading && this.currentPage < this.totalPages) {
+                this.currentPage++;
+                this.getSeries(this.currentPage); // Carica la pagina successiva
+            }
         }
     },
     mounted() {
-        this.getSeries();
+        this.getSeries(); 
+        // Aggiungi l'evento di scroll per il caricamento automatico
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    beforeUnmount() {
+        // Rimuovi l'evento di scroll quando il componente viene smontato
+        window.removeEventListener('scroll', this.handleScroll);
     }
-}
+};
 </script>
 
 <style>
