@@ -10,7 +10,8 @@
             <MovieCard
                 v-for="movie in displayedMovies"
                 :key="movie.id"
-                :movie="movie">
+                :movie="movie"
+                :language="currentLanguage"> <!-- Passa la lingua corrente -->
             </MovieCard>
         </div>
     </div>
@@ -28,11 +29,11 @@ export default {
             currentPage: 1,
             totalPages: 0,
             maxMovies: 5,
-            thresholdOffset: 200
+            thresholdOffset: 200,
+            currentLanguage: this.$root.currentLanguage // Aggiungi la lingua corrente
         };
     },
     computed: {
-        // Filtra i film in base alla query di ricerca
         filteredMovies() { 
             return this.movies.filter(movie => {
                 return movie.title.toLowerCase().includes(this.searchQuery.toLowerCase());
@@ -52,7 +53,7 @@ export default {
                 }
             };
 
-            fetch(`https://api.themoviedb.org/3/movie/popular?language=en&page=${page}`, options)
+            fetch(`https://api.themoviedb.org/3/movie/popular?language=${this.currentLanguage}&page=${page}`, options)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -61,8 +62,7 @@ export default {
                 })
                 .then(data => {
                     if (data.results) {
-                        if (page === 1)
-                        {
+                        if (page === 1) {
                             this.movies = data.results;
                         } else {
                             const limitedResults = data.results.slice(0, this.maxMovies);
@@ -70,7 +70,7 @@ export default {
                         }
                         this.totalPages = data.total_pages;
                     } else {
-                        console.warn('No results found for page:', page );
+                        console.warn('No results found for page:', page);
                     }
                 })
                 .catch(error => {
@@ -83,12 +83,12 @@ export default {
 
             if (scrollPosition >= threshold && this.currentPage < this.totalPages) {
                 this.currentPage++;
-                this.getMovies(this.currentPage); // Carica la pagina successiva
+                this.getMovies(this.currentPage);
             }
         }
     },
     mounted() {
-        this.getMovies(); // Carica i film della prima pagina
+        this.getMovies();
         window.addEventListener('scroll', this.handleScroll);
     },
     beforeUnmount() {
@@ -113,6 +113,6 @@ export default {
 .movies {
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-    gap: 16px; /* Spazio tra le card */
+    gap: 16px; 
 }
 </style>

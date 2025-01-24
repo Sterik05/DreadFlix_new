@@ -8,10 +8,9 @@
           <img :src="`https://image.tmdb.org/t/p/w500${serie.poster_path}`" :alt="serie.title">
           <div class="serie-info">
               <p class="serie-description">{{ serie.overview }}</p>
-              <p><strong>Language:</strong> {{ serie.original_language }}</p>
-              <p><strong>First Air Date:</strong> {{ serie.first_air_date }}</p>
-              <p><strong>Rating:</strong> {{ serie.vote_average }}</p>
-
+              <p><strong>{{ $t( 'originalLanguage' ) }}:</strong> {{ serie.original_language }}</p>
+              <p><strong>{{ $t( 'Data di uscita' ) }}:</strong> {{ serie.first_air_date }}</p>
+              <p><strong>{{ $t( 'rating' ) }}:</strong> {{ serie.vote_average }}</p>
               <!-- Elemento per il rating -->
               <div class="star-rating">
                   <span 
@@ -25,26 +24,24 @@
                       ★
                   </span>
               </div>
-              <p><strong>Your Rating:</strong> {{ userRating }}</p>
-
+              <p><strong>{{ $t( 'yourRating' ) }}:</strong> {{ userRating }}</p>
               <!-- Modulo di recensione -->
               <div class="review-form">
-                  <h2>Leave a Review</h2>
+                  <h2>{{ $t( 'reviewMessage' ) }}</h2>
                   <input type="email" v-model="email" placeholder="Enter your email" required />
                   <textarea v-model="reviewText" placeholder="Write your review here..." rows="4"></textarea>
-                  <button @click="submitReview">Submit Review</button>
-                  <div v-if="submitted" class="review-message">Thank you for your review!</div>
+                  <button @click="submitReview">{{ $t( 'submitReview' ) }}</button>
+                  <div v-if="submitted" class="review-message">{{ $t( 'revieMessage' ) }}</div>
               </div>
           </div>
       </div>
-
       <!-- Sezione per visualizzare le recensioni -->
       <div class="reviews">
           <h2>Reviews</h2>
           <ul>
               <li v-for="(review, index) in reviews" :key="index">
                   <p><strong>Email:</strong> {{ review.email }}</p>
-                  <p><strong>Rating:</strong> {{ review.rating }}</p>
+                  <p><strong>{{ $t( 'rating' ) }}:</strong> {{ review.rating }}</p>
                   <p>{{ review.text }}</p>
               </li>
           </ul>
@@ -57,16 +54,17 @@ export default {
   data() {
       return {
           serie: null,
-          reviewText: '', // Per memorizzare il testo della recensione
-          email: '', // Per memorizzare l'email dell'utente
-          submitted: false, // Per gestire il messaggio di conferma
-          userRating: 0, // Per memorizzare il rating dell'utente
-          tempRating: 0, // Per gestire il rating temporaneo
-          reviews: [] // Array per memorizzare le recensioni
+          reviewText: '',
+          email: '',
+          submitted: false,
+          userRating: 0,
+          tempRating: 0,
+          reviews: []
       };
   },
   props: {
       id: { type: String, required: true },
+      currentLanguage: { type: String, default: 'en' } // Aggiungi la prop per la lingua
   },
   methods: {
       getSerie() {
@@ -78,7 +76,7 @@ export default {
               },
           };
 
-          fetch(`https://api.themoviedb.org/3/tv/${this.id}?language=en-US`, options)
+          fetch(`https://api.themoviedb.org/3/tv/${this.id}?language=${this.currentLanguage}`, options)
               .then(response => {
                   if (!response.ok) {
                       throw new Error('Network response was not ok');
@@ -86,21 +84,21 @@ export default {
                   return response.json();
               })
               .then(data => {
-                  this.serie = data; // Imp osta la serie con i dettagli
+                  this.serie = data;
               })
               .catch(error => {
                   console.error('There was a problem with the fetch operation:', error);
               });
       },
       setRating(star) {
-          this.userRating = star; // Imposta il rating dell'utente
-          this.tempRating = 0; // Resetta il rating temporaneo
+          this.userRating = star;
+          this.tempRating = 0;
       },
       resetRating() {
-          this.tempRating = 0; // Ripristina il rating temporaneo quando il cursore esce
+          this.tempRating = 0;
       },
       hoverRating(star) {
-            this.tempRating = star; // Imposta il rating temporaneo durante il passaggio del mouse
+          this.tempRating = star;
       },
       submitReview() {
           if (this.reviewText.trim() !== '' && this.email.trim() !== '') {
@@ -109,20 +107,21 @@ export default {
                   text: this.reviewText,
                   rating: this.userRating
               };
-              this.reviews.push(newReview); // Aggiungi la nuova recensione all'array
+              this.reviews.push(newReview);
               console.log('Review submitted:', newReview);
-              this.submitted = true; // Mostra il messaggio di conferma
-              this.reviewText = ''; // Resetta il campo di input
-              this.email = ''; // Resetta il campo email
-              this.userRating = 0; // Resetta il rating dopo l'invio
+              this.submitted = true;
+              this.reviewText = '';
+              this.email = '';
+              this.userRating = 0;
           }
       },
   },
   mounted() {
-      this.getSerie(); // Chiama il metodo per ottenere i dettagli della serie
+      this.getSerie();
   },
 }
 </script>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
@@ -168,6 +167,21 @@ export default {
   margin-top: 10px; 
   font-size: 1.5em;
 }
+
+
+.serie img {
+  max-width: 280px; 
+  border-radius: 8px; 
+  margin-right: 20px; 
+  transition: transform 0.3s ease;
+}
+
+.serie-details img:hover {
+    transform: scale(1.1); /* Ingrandimento dell'immagine */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.8); /* Ombra più evidente */
+}
+
+
 
 .back {
   margin-bottom: 20px; 

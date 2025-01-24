@@ -3,20 +3,25 @@
       <div class="card">
         <img class="image" :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" :title="movie.original_title">
         <div class="card-content">
-          <h2 class="card-title">{{ movie.original_title }}</h2>
-          <p class="card-popularity">Popularity: {{ movie.popularity }}</p>
-          <p class="card-vote">Rating: {{ movie.vote_average }}</p>
-          <p class="card-language">Language: {{ movie.original_language }}</p>
+          <h2 class="card-title">{{ movie.title }}</h2>
+          <p class="card-popularity">{{ $t( 'popularity' )}}: {{ movie.popularity }}</p>
+          <p class="card-vote">{{ $t( 'rating' )}}: {{ movie.vote_average }}</p>
+          <p class="card-language">{{ $t( 'originalLanguage' )}}: {{ movie.original_language }}</p>
         </div>
       </div>
     </router-link>
-  </template>
-
+</template>
 
 <script>
 export default {
     props: {
-        movie: { type: Object, required: true }
+        movie: { type: Object, required: true },
+        language: { type: String, default: 'en' }
+    },
+    computed: {
+        movieTitle() {
+            return this.language === 'it' ? this.movie.title_it : this.movie.title;
+        }
     }
 }
 </script>
@@ -37,7 +42,7 @@ export default {
     background-color: #2c2c2c; 
 }
 
-.card:hover{
+.card:hover {
     border-radius: 12px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
     overflow: hidden; 
@@ -65,7 +70,7 @@ export default {
     font-size: 1.4em;
     margin: 0; 
     font-weight: bold; 
-}
+ }
 
 .card-popularity,
 .card-vote,

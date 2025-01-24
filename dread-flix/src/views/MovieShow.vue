@@ -8,10 +8,9 @@
           <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title">
           <div class="movie-info">
               <p class="movie-description">{{ movie.overview }}</p>
-              <p><strong>Language:</strong> {{ movie.original_language }}</p>
-              <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
-              <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
-              
+              <p><strong>{{ $t( 'originalLanguage' ) }}:</strong> {{ movie.original_language }}</p>
+              <p><strong>{{ $t( 'releaseDate' ) }}:</strong> {{ movie.release_date }}</p>
+              <p><strong>{{ $t( 'rating') }}:</strong> {{ movie.vote_average }}</p>
               <!-- Elemento per il rating -->
               <div class="star-rating">
                   <span 
@@ -25,11 +24,10 @@
                       ★
                   </span>
               </div>
-              <p><strong>Your Rating:</strong> {{ userRating }}</p>
-
+              <p><strong>{{ $t( 'yourRating' ) }}:</strong> {{ userRating }}</p>
               <!-- Modulo di recensione -->
               <div class="review-form">
-                  <h2>Leave a Review</h2>
+                  <h2>{{ $t( 'reviewTitle' ) }}</h2>
                   <input 
                       type="email" 
                       v-model="email" 
@@ -37,17 +35,16 @@
                       required 
                   />
                   <textarea v-model="reviewText" placeholder="Write your review here..." rows="4"></textarea>
-                  <button @click="submitReview">Submit Review</button>
-                  <div v-if="submitted" class="review-message">Thank you for your review!</div>
+                  <button @click="submitReview">{{ $t( 'submitReview' ) }}</button>
+                  <div v-if="submitted" class="review-message">{{ $t( 'thankYou' ) }}</div>
               </div>
-
               <!-- Sezione per visualizzare le recensioni -->
               <div class="reviews">
-                  <h2>Reviews</h2>
+                  <h2>{{ $t( 'reviews' ) }}:</h2>
                   <ul>
                       <li v-for="(review, index) in reviews" :key="index">
                           <p><strong>Email:</strong> {{ review.email }}</p>
-                          <p><strong>Rating:</strong> {{ review.rating }}</p>
+                          <p><strong>{{ $t( 'rating' ) }}:</strong> {{ review.rating }}</p>
                           <p>{{ review.text }}</p>
                       </li>
                   </ul>
@@ -65,11 +62,15 @@ export default {
           movie: null,
           reviewText: '',
           email: '', 
-          submitted: false, // Per gestire il messaggio di conferma
+          submitted: false,
           userRating: 0, 
-          tempRating: 0, // Per gestire il rating temporaneo
+          tempRating: 0,
           reviews: [] 
       };
+  },
+  props: {
+      id: { type: String, required: true },
+      currentLanguage: { type: String, default: 'en' } // Aggiungi la prop per la lingua
   },
   methods: {
       getMovies() {
@@ -81,7 +82,7 @@ export default {
               }
           };
 
-          fetch('https://api.themoviedb.org/3/movie/popular?language=en&page=1', options)
+          fetch(`https://api.themoviedb.org/3/movie/popular?language=${this.currentLanguage}&page=1`, options)
               .then(response => {
                   if (!response.ok) {
                       throw new Error('Network response was not ok');
@@ -100,14 +101,14 @@ export default {
           this.movie = this.movies.find(movie => movie.id === Number(this.id));
       },
       setRating(star) {
-          this.userRating = star; // Imposta il rating dell'utente
-          this.tempRating = 0; // Resetta il rating temporaneo
+          this.userRating = star;
+          this.tempRating = 0;
       },
       hoverRating(star) {
-          this.tempRating = star; // Imposta il rating temporaneo durante il passaggio del mouse
+          this.tempRating = star;
       },
       resetRating() {
-          this.tempRating = 0; // Ripristina il rating temporaneo quando il cursore esce
+          this.tempRating = 0;
       },
       submitReview() {
           if (this.reviewText.trim() !== '' && this.email.trim() !== '') {
@@ -116,176 +117,181 @@ export default {
                   text: this.reviewText,
                   rating: this.userRating
               };
-              this.reviews.push(newReview); // Aggiungi la nuova recensione all'array
+              this.reviews.push(newReview);
               console.log('Review submitted:', newReview);
-              this.submitted = true; // Mostra il messaggio di conferma
-              this.reviewText = ''; // Resetta il campo di input
-              this.email = ''; // Resetta il campo email
-              this.userRating = 0; // Resetta il rating dopo l'invio
+              this.submitted = true;
+              this.reviewText = '';
+              this.email = '';
+              this.userRating = 0;
           }
       }
-  },
-  props: {
-      id: { type: String, required: true }
   },
   mounted() {
       this.getMovies();
   }
 }
 </script>
-
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-.movie {
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 20px;
-background-color: #293133;
-font-family: 'Bebas Neue', sans-serif;
-color: #fff;
-min-height: 100vh; 
-}
-
-.back {
-margin-bottom: 20px; /* Spazio tra il link e il titolo */
-}
-
-.home-icon {
-width: 60px; /* Dimensione dell'icona */
-height: 60px; /* Dimensione dell'icona */
-}
-
-.movie-details {
-display: flex;
-flex-direction: row;
-align-items: flex-start;
-margin-top: 20px;
-gap: 20px; 
-letter-spacing: 1.2px;
-}
-
-.movie-info {
-text-align: left;
-}
-
-.movie img {
-max-width: 280px; 
-border-radius: 8px; 
-margin-right: 20px; 
-}
-
-.title {
-font-size: 5em; 
-margin-bottom: 10px;
-}
-
-.movie-description {
-max-width: 700px; 
-text-align: justify; 
-line-height: 1.6; 
-margin-top: 10px; 
-font-size: 1.5em;
-}
-
-.review-form {
-  margin-top: 30px; 
-  background-color: rgba(133, 131, 131, 0.349); 
-  padding: 15px;
-  border-radius: 8px;
-  color: #000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
-  width: 100%; 
-  max-width: 600px; 
-}
-
-.review-form h2 {
-  margin-bottom: 10px;
-  font-size: 1.6em;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.review-form input[type="email"] {
-  width: 90%;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  resize: none;
-  font-size: 1em; 
-  margin-bottom: 10px; 
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.review-form textarea {
-  width: 90%;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  resize: none;
-  font-size: 1em; 
-  margin-bottom: 10px; 
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.review-form button {
-  margin-top : 10px;
-  background-color: #800000;
-  color: antiquewhite;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-  font-size: 1em; 
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.review-form button:hover {
-  background-color: rgba(173, 51, 51, 0.7);
-}
-
-.review-message {
-  margin-top: 10px;
-  color: antiquewhite;
-  font-weight: bold;
-  letter-spacing: 3px;
-}
-
-.star-rating {
+  .movie {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #293133;
+  font-family: 'Bebas Neue', sans-serif;
+  color: #fff;
+  min-height: 100vh; 
+  }
+
+  .back {
+  margin-bottom: 20px; /* Spazio tra il link e il titolo */
+  }
+
+  .home-icon {
+  width: 60px; /* Dimensione dell'icona */
+  height: 60px; /* Dimensione dell'icona */
+  }
+
+  .movie-details {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+  gap: 20px; 
+  letter-spacing: 1.2px;
+
+  }
+
+  .movie-info {
+  text-align: left;
+  }
+
+  .movie img {
+  max-width: 280px; 
+  border-radius: 8px; 
+  margin-right: 20px; 
+  transition: transform 0.3s ease;
+  }
+
+  .movie-details img:hover {
+    transform: scale(1.1); /* Ingrandimento dell'immagine */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.8); /* Ombra più evidente */
+  }
+
+
+
+  .title {
+  font-size: 5em; 
+  margin-bottom: 10px;
+  }
+
+  .movie-description {
+  max-width: 700px; 
+  text-align: justify; 
+  line-height: 1.6; 
   margin-top: 10px; 
-}
+  font-size: 1.5em;
+  }
 
-.star {
-  font-size: 2em; 
-  cursor: pointer;
-  color: #ccc; 
-  transition: color 0.2s;
-}
+  .review-form {
+    margin-top: 30px; 
+    background-color: rgba(90, 89, 89, 0.349); 
+    padding: 15px;
+    border-radius: 8px;
+    color: #000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+    width: 100%; 
+    max-width: 600px; 
+  }
 
-.star.filled {
-  color: #d67e36; 
-}
+  .review-form h2 {
+    margin-bottom: 10px;
+    font-size: 1.6em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
 
-.reviews {
-  margin-top: 20px; 
-}
+  .review-form input[type="email"] {
+    width: 90%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    font-size: 1em; 
+    margin-bottom: 10px; 
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
 
-.reviews h2 {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  padding-top: 5%;
-}
+  .review-form textarea {
+    width: 90%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    font-size: 1em; 
+    margin-bottom: 10px; 
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
 
-.reviews ul {
-  list-style-type: none;
-  padding: 0; 
-}
+  .review-form button {
+    margin-top : 10px;
+    background-color: #800000;
+    color: antiquewhite;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 1em; 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
 
-.reviews li {
-  background-color: rgba(255, 255, 255, 0.1); 
-  margin: 10px 0; 
-  padding: 10px; 
-  border-radius: 5px; 
-}
+  .review-form button:hover {
+    background-color: rgba(173, 51, 51, 0.7);
+  }
+
+  .review-message {
+    margin-top: 10px;
+    color: antiquewhite;
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+
+  .star-rating {
+    display: flex;
+    margin-top: 10px; 
+  }
+
+  .star {
+    font-size: 2em; 
+    cursor: pointer;
+    color: #ccc; 
+    transition: color 0.2s;
+  }
+
+  .star.filled {
+    color: #d67e36; 
+  }
+
+  .reviews {
+    margin-top: 20px; 
+  }
+
+  .reviews h2 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-top: 5%;
+  }
+
+  .reviews ul {
+    list-style-type: none;
+    padding: 0; 
+  }
+
+  .reviews li {
+    background-color: rgba(255, 255, 255, 0.1); 
+    margin: 10px 0; 
+    padding: 10px; 
+    border-radius: 5px; 
+  }
 </style>

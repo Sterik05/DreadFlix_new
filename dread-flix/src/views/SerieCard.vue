@@ -3,20 +3,25 @@
       <div class="card">
         <img class="image" :src="`https://image.tmdb.org/t/p/w500${serie.poster_path}`" :alt="serie.title" :title="serie.original_title">
         <div class="card-content">
-          <h2 class="card-title">{{ serie.original_title }}</h2>
-          <p class="card-popularity">Popularity: {{ serie.popularity }}</p>
-          <p class="card-vote">Rating: {{ serie.vote_average }}</p>
-          <p class="card-language">Language: {{ serie.original_language }}</p>
+          <h2 class="card-title">{{ serie.name }}</h2>
+          <p class="card-popularity">{{ $t( 'popularity' ) }}: {{ serie.popularity }}</p>
+          <p class="card-vote">{{ $t( 'rating' ) }}: {{ serie.vote_average }}</p>
+          <p class="card-language">{{ $t( 'originalLanguage' ) }}: {{ serie.original_language }}</p>
         </div>
       </div>
     </router-link>
-  </template>
-
+</template>
 
 <script>
 export default {
     props: {
-        serie: { type: Object, required: true }
+        serie: { type: Object, required: true },
+        language: { type: String, default: 'en' }
+    },
+    computed: {
+        serieName() {
+            return this.language === 'it' ? this.serie.name_it : this.serie.name; // Assicurati che l'API restituisca il nome in italiano
+        }
     }
 }
 </script>

@@ -10,7 +10,8 @@
             <SerieCard
                 v-for="serie in filteredSeries"
                 :key="serie.id"
-                :serie="serie">
+                :serie="serie"
+                :language="currentLanguage"> <!-- Passa la lingua corrente -->
             </SerieCard>
         </div>
     </div>
@@ -28,12 +29,12 @@ export default {
             currentPage: 1, 
             totalPages: 0, 
             maxSeriesPerLoad: 5,
-            thresholdOffset: 200
+            thresholdOffset: 200,
+            currentLanguage: this.$root.currentLanguage // Aggiungi la lingua corrente
         };
     },
     computed: {
         filteredSeries() {
-            // Filtra le serie in base alla query di ricerca
             return this.series.filter(serie => {
                 return serie.name.toLowerCase().includes(this.searchQuery.toLowerCase());
             });
@@ -49,7 +50,7 @@ export default {
                 }
             };
 
-            fetch(`https://api.themoviedb.org/3/trending/tv/day?language=en-US&page=${page}`, options)
+            fetch(`https://api.themoviedb.org/3/trending/tv/day?language=${this.currentLanguage}&page=${page}`, options)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -62,29 +63,27 @@ export default {
                     } else {
                         this.series = [...this.series, ...data.results.slice(0, this.maxSeriesPerLoad)];
                     }
-                    this.totalPages = data.total_pages; // Imposta il totale delle pagine
+                    this.totalPages = data.total_pages;
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
-                })
+                });
         },
         handleScroll() {
             const scrollPosition = window.innerHeight + window.scrollY;
             const threshold = document.body.offsetHeight - this.thresholdOffset;
 
-            if (scrollPosition >= threshold && !this.loading && this.currentPage < this.totalPages) {
+            if (scrollPosition >= threshold && this.currentPage < this.totalPages) {
                 this.currentPage++;
-                this.getSeries(this.currentPage); // Carica la pagina successiva
+                this.getSeries(this.currentPage);
             }
         }
     },
     mounted() {
-        this.getSeries(); 
-        // Aggiungi l'evento di scroll per il caricamento automatico
+        this.getSeries();
         window.addEventListener('scroll', this.handleScroll);
     },
     beforeUnmount() {
-        // Rimuovi l'evento di scroll quando il componente viene smontato
         window.removeEventListener('scroll', this.handleScroll);
     }
 };
