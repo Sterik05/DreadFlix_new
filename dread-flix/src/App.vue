@@ -3,13 +3,15 @@
     <router-link to="/movies"><h1 class="reload">DREAD FLIX</h1></router-link>
     <nav>
     <ul class="navbar">
+      
       <!-- Logo -->
       <li class="logo1">
         <router-link to="/">
           <img src="../dreadflix_logo.webp" alt="Dread Flix">
         </router-link>
       </li>
-      <!-- Pulsanti affiancati per Movies e Tv Series -->
+
+      <!-- Pulsanti per Movies e Tv Series -->
       <li class="nav-buttons">
         <router-link to="/movies" class="nav-button">
           <button>Movies</button>
@@ -28,8 +30,7 @@
   <script>
   export default {
     methods: {
-      // Non servono più showSidebar e hideSidebar poiché la sidebar è stata rimossa
+      
     },
   };
   </script>
-  

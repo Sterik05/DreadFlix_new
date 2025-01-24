@@ -25,51 +25,51 @@ export default {
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px; /* Spazio tra le card */
-    padding: 16px; /* Padding del contenitore */
+    gap: 16px; 
+    padding: 16px;
 }
 
 .card-link {
-    text-decoration: none; /* Rimuove la sottolineatura */
+    text-decoration: none; 
 }
 
 .card {
-    background-color: #2c2c2c; /* Colore di sfondo della card */
-    border-radius: 12px; /* Angoli arrotondati */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Ombra della card */
-    overflow: hidden; /* Nasconde il contenuto che esce dai bordi */
-    transition: transform 0.2s, box-shadow 0.2s; /* Transizione per l'effetto hover */
+    background-color: #2c2c2c; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    overflow: hidden; 
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .card:hover {
-    transform: scale(1.02); /* Effetto di ingrandimento al passaggio del mouse */
-    box-shadow: 0 6px 20px rgb(255, 0, 0); /* Ombra più intensa al passaggio del mouse */
+    transform: scale(1.02); 
+    box-shadow: 0 6px 20px rgb(255, 0, 0); 
 }
 
 .image {
-    width: 100%; /* Immagine a larghezza piena */
-    height: auto; /* Altezza automatica per mantenere le proporzioni */
-    border-bottom: 4px solid #ba2323; /* Bordo inferiore per l'immagine */
+    width: 100%; 
+    height: auto; 
+    border-bottom: 4px solid #ba2323; 
 }
 
 .card-content {
-    padding: 16px; /* Padding interno della card */
-    color: #ffffff; /* Colore del testo */
-    font-family: 'Roboto', sans-serif; /* Font importato */
+    padding: 16px; 
+    color: #ffffff; 
+    font-family: 'Roboto', sans-serif; 
 }
 
 .card-title {
-    font-size: 1.4em; /* Dimensione del titolo */
-    margin: 0; /* Rimuove il margine */
-    font-weight: bold; /* Grassetto per il titolo */
+    font-size: 1.4em; 
+    margin: 0; 
+    font-weight: bold; 
 }
 
 .card-popularity,
 .card-vote,
 .card-language {
-    margin: 4px 0; /* Margine verticale per i paragrafi */
-    font-size: 0.9em; /* Dimensione del testo per le informazioni */
-    color: #cccccc; /* Colore del testo per le informazioni */
-    font-family: 'Roboto', sans-serif; /* Font per le informazioni */
+    margin: 4px 0; 
+    font-size: 0.9em; 
+    color: #cccccc; 
+    font-family: 'Roboto', sans-serif; 
 }
 </style>

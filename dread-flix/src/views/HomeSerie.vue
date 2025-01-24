@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             series: [],
-            searchQuery: '', // Aggiungi una proprietà per la query di ricerca
+            searchQuery: '', 
             currentPage: 1, 
             totalPages: 0, 
             maxSeriesPerLoad: 5,
@@ -92,20 +92,20 @@ export default {
 
 <style>
 .homeSerie {
-    padding: 16px; /* Padding per il contenitore principale */
+    padding: 16px; 
 }
 
 .search-input {
-    width: 98%; /* Larghezza del campo di ricerca */
-    padding: 8px; /* Padding interno */
-    margin-bottom: 16px; /* Margine inferiore */
-    border: 1px solid #ccc; /* Bordo del campo di ricerca */
-    border-radius: 4px; /* Angoli arrotondati */
+    width: 98%; 
+    padding: 8px; 
+    margin-bottom: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
 }
 
 .series {
-    display: grid; /* Imposta il contenitore delle card come griglia */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Colonne automatiche con larghezza minima */
-    gap: 16px; /* Spazio tra le card */
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 16px; 
 }
 </style>

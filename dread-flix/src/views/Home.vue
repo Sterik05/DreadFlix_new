@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             movies: [],
-            searchQuery: '', // Aggiungi una proprietà per la query di ricerca
+            searchQuery: '',
             currentPage: 1,
             totalPages: 0,
             maxMovies: 5,
@@ -32,8 +32,8 @@ export default {
         };
     },
     computed: {
-        filteredMovies() {
-            // Filtra i film in base alla query di ricerca
+        // Filtra i film in base alla query di ricerca
+        filteredMovies() { 
             return this.movies.filter(movie => {
                 return movie.title.toLowerCase().includes(this.searchQuery.toLowerCase());
             });
@@ -99,20 +99,20 @@ export default {
 
 <style>
 .home {
-    padding: 16px; /* Padding per il contenitore principale */
+    padding: 16px;
 }
 
 .search-input {
-    width: 98%; /* Larghezza del campo di ricerca */
-    padding: 8px; /* Padding interno */
-    margin-bottom: 16px; /* Margine inferiore */
-    border: 1px solid #ccc; /* Bordo del campo di ricerca */
-    border-radius: 4px; /* Angoli arrotondati */
+    width: 98%;
+    padding: 8px; 
+    margin-bottom: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
 }
 
 .movies {
-    display: grid; /* Imposta il contenitore delle card come griglia */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Colonne automatiche con larghezza minima */
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
     gap: 16px; /* Spazio tra le card */
 }
 </style>

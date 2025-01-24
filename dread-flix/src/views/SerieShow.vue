@@ -132,8 +132,8 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #293133; /* Colore di sfondo originale */
-  font-family: 'Bebas Neue', sans-serif; /* Font simile a quello di Netflix */
+  background-color: #293133;
+  font-family: 'Bebas Neue', sans-serif; 
   color: #fff;
   min-height: 100vh; 
 }
@@ -143,7 +143,7 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   margin-top: 20px;
-  gap: 20px; /* Spaziatura tra i dettagli */
+  gap: 20px; 
 }
 
 .serie-info {
@@ -151,63 +151,63 @@ export default {
 }
 
 .serie img {
-  max-width: 250px; /* Dimensione massima per l'immagine */
-  border-radius: 8px; /* Angoli arrotondati per l'immagine */
-  margin-right: 20px; /* Margine a destra per separare l'immagine dal testo */
+  max-width: 250px; 
+  border-radius: 8px; 
+  margin-right: 20px; 
 }
 
 .title {
-  font-size: 5em; /* Dimensione del titolo più grande */
+  font-size: 5em; 
   margin-bottom: 10px;
 }
 
 .serie-description {
-  max-width: 700px; /* Larghezza massima per la descrizione */
-  text-align: justify; /* Giustifica il testo */
-  line-height: 1.6; /* Maggiore spaziatura tra le righe */
-  margin-top: 10px; /* Margine superiore per la descrizione */
+  max-width: 700px; 
+  text-align: justify; 
+  line-height: 1.6;
+  margin-top: 10px; 
   font-size: 1.5em;
 }
 
 .back {
-  margin-bottom: 20px; /* Spazio tra il link e il titolo */
+  margin-bottom: 20px; 
 }
 
 .home-icon {
-  width: 60px; /* Dimensione dell'icona */
-  height: 60px; /* Dimensione dell'icona */
+  width: 60px; 
+  height: 60px; 
 }
 
 .star-rating {
   display: flex;
-  margin-top: 10px; /* Spazio sopra il rating */
+  margin-top: 10px; 
 }
 
 .star {
-  font-size: 2em; /* Dimensione delle stelle */
+  font-size: 2em; 
   cursor: pointer;
-  color: #ccc; /* Colore delle stelle vuote */
+  color: #ccc; 
   transition: color 0.2s;
 }
 
 .star.filled {
-  color: #d67e36; /* Colore delle stelle piene */
+  color: #d67e36; 
 }
 
 .review-form {
-  margin-top: 30px; /* Maggiore spazio sopra il modulo */
-  background-color: rgba(133, 131, 131, 0.349); /* Sfondo bianco con trasparenza */
+  margin-top: 30px; 
+  background-color: rgba(133, 131, 131, 0.349); 
   padding: 15px;
   border-radius: 8px;
   color: #000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Ombra per dare profondità */
-  width: 100%; /* Larghezza del modulo */
-  max-width: 600px; /* Larghezza massima per il modulo */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+  width: 100%; 
+  max-width: 600px; 
 }
 
 .review-form h2 {
   margin-bottom: 10px;
-  font-size: 1.6em; /* Dimensione del titolo */
+  font-size: 1.6em; 
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -217,8 +217,8 @@ export default {
     border: none;
     border-radius: 5px;
     resize: none;
-    font-size: 1em; /* Dimensione del testo */
-    margin-bottom: 10px; /* Spazio sotto il textarea */
+    font-size: 1em; 
+    margin-bottom: 10px; 
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -228,8 +228,8 @@ export default {
   border: none;
   border-radius: 5px;
   resize: none;
-  font-size: 1em; /* Dimensione del testo */
-  margin-bottom: 10px; /* Spazio sotto il textarea */
+  font-size: 1em;
+  margin-bottom: 10px; 
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -242,7 +242,7 @@ export default {
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s;
-  font-size: 1em; /* Dimensione del testo */
+  font-size: 1em;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -258,7 +258,7 @@ export default {
 }   
 
 .reviews {
-  margin-top: 20px; /* Spazio sopra la sezione delle recensioni */
+  margin-top: 20px; 
 }
 
 .reviews h2 {
@@ -267,14 +267,14 @@ export default {
 }
 
 .reviews ul {
-    list-style-type: none; /* Rimuove i punti elenco */
-    padding: 0; /* Rimuove il padding */
+    list-style-type: none; 
+    padding: 0; 
 }
 
 .reviews li {
-    background-color: rgba(255, 255, 255, 0.1); /* Sfondo leggero per le recensioni */
-    margin: 10px 0; /* Margine tra le recensioni */
-    padding: 10px; /* Padding interno */
-    border-radius: 5px; /* Angoli arrotondati */
+    background-color: rgba(255, 255, 255, 0.1); 
+    margin: 10px 0;
+    padding: 10px; 
+    border-radius: 5px;
 }
 </style>
