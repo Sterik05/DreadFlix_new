@@ -5,15 +5,33 @@
     </router-link>
     <nav>
       <ul class="navbar">
-        <!-- Logo -->
         <li class="logo1">
           <router-link to="/">
             <img src="../dreadflix_logo.webp" alt="Dread Flix">
           </router-link>
-          <button class="language-btn" @click="toggleLanguage">{{ $t('languageToggle') }}</button>
+          <transition name="fade">
+            <div>
+              <img 
+                v-if="currentLanguage === 'en'" 
+                key="en" 
+                src="../usaFlag.png" 
+                alt="usaflag" 
+                class="flags flag" 
+              />
+              <img 
+                v-if="currentLanguage === 'it'" 
+                key="it" 
+                src="../italyFlag.png" 
+                alt="italyflag" 
+                class="flags flag" 
+              />
+            </div>
+          </transition>
+          <select v-model="currentLanguage" @change="changeLanguage" class="language-select language-select-btn">
+            <option value="en">English</option>
+            <option value="it">Italiano</option>
+          </select>
         </li>
-
-        <!-- Pulsanti per Movies e Tv Series -->
         <li class="nav-buttons">
           <router-link to="/movies" class="nav-button">
             <button>{{ $t('movies') }}</button>
@@ -38,8 +56,7 @@ export default {
     };
   },
   methods: {
-    toggleLanguage() {
-      this.currentLanguage = this.currentLanguage === 'en' ? 'it' : 'en';
+    changeLanguage() {
       localStorage.setItem('language', this.currentLanguage);
       this.$i18n.locale = this.currentLanguage; // Aggiorna la lingua di Vue I18n
     },
@@ -53,3 +70,4 @@ export default {
   },
 };
 </script>
+

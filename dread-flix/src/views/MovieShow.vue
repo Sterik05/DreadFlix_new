@@ -44,7 +44,7 @@
                   <ul>
                       <li v-for="(review, index) in reviews" :key="index">
                           <p><strong>Email:</strong> {{ review.email }}</p>
-                          <p><strong>{{ $t( 'rating' ) }}:</strong> {{ review.rating }}</p>
+                          <p><strong>{{ $t( 'rating' ) }}:</strong> {{ review.rating }} ★</p>
                           <p>{{ review.text }}</p>
                       </li>
                   </ul>

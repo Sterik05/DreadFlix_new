@@ -108,3 +108,34 @@ h2 {
   font-family: 'Roboto', sans-serif;
   color: #fff;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
+.flags {
+  width: 30px !important; /* Imposta la larghezza della bandiera */
+  height: auto !important; /* Mantieni le proporzioni */
+  padding-right: 10px;
+}
+
+
+.language-select-btn {
+  background-color: #800000; /* Colore di sfondo */
+  border: none; /* Rimuovi il bordo */
+  padding: 10px 15px; /* Padding per il pulsante */
+  cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+  font-size: 16px; /* Dimensione del font */
+  font-weight: bold; /* Grassetto */
+  border-radius: 5px; /* Angoli arrotondati */
+  color: antiquewhite; /* Colore del testo */
+}
+
+.language-select-btn:hover {
+  background-color: rgba(173, 51, 51, 0.7); /* Colore di sfondo al passaggio del mouse */
+
+}
