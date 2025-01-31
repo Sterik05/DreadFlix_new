@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="`/movie/${movie.id}`" class="card-link">
+    <router-link :to="`/movie/${movie.id_meta}`" class="card-link">
       <div class="card">
         <img class="image" :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" :title="movie.original_title">
         <div class="card-content">

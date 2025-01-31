@@ -65,7 +65,9 @@ export default {
       submitted: false,
       userRating: 0,
       tempRating: 0,
-      reviews: []
+      reviews: [],
+      // Your existing data properties here
+      reviewsError: null
     };
   },
   props: {
@@ -77,11 +79,11 @@ export default {
       const options = {
         method: 'GET',
         headers: {
-          accept: 'application/json',
+          accept: 'application/json'
         }
       };
 
-      fetch(`http://localhost/netflix_php/read/movie?id_meta=${this.id_meta}&language=${this.currentLanguage}`, options)
+      fetch(`http://localhost/netflix_php/read_single/movie?id_meta=${this.id_meta}&language=${this.currentLanguage}`, options)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -90,8 +92,7 @@ export default {
         })
         .then(data => {
           this.movies = data.results;
-          this.setMovie();
-          this.fetchReviews();  // Carica le recensioni quando il film è caricato
+          this.setMovie();  
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error);
@@ -99,14 +100,14 @@ export default {
     },
     setMovie() {
       if (!Array.isArray(this.movies)) {
-          console.error("this.movies non è un array");
-          return;
+        console.error("this.movies is not an array");
+        return;
       }
       this.movie = this.movies.find(movie => movie.id_meta === Number(this.id_meta));
       if (!this.movie) {
-          console.error("Film non trovato con id_meta:", this.id_meta);
+        console.error("Movie not found with id_meta:", this.id_meta);
       } else {
-          this.fetchReviews(); // Chiamata a fetchReviews solo se il film è stato trovato
+        this.fetchReviews(); // Call fetchReviews only if the movie is found
       }
     },
     setRating(star) {
@@ -119,99 +120,87 @@ export default {
     resetRating() {
       this.tempRating = 0;
     },
-    // Codice per inviare la review
+    // Code to submit the review
     submitReview() {
-    console.log("Invio recensione:", {
+      console.log("Submitting review:", {
         id_film: this.movie.id_meta,
         email: this.email,
         text: this.reviewText,
         rating: this.userRating
-    });
+      });
 
-    fetch(`http://localhost/netflix_php/create/review`, {
+      fetch(`http://localhost/netflix_php/create/review`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id_film: this.movie.id_meta,
-            email: this.email,
-            text: this.reviewText,
-            rating: this.userRating
+          id_film: this.movie.id_meta,
+          email: this.email,
+          text: this.reviewText,
+          rating: this.userRating
         })
-    })
-    .then(response => {
+      })
+      .then(response => {
         if (!response.ok) {
-            throw new Error('Errore nella risposta del server');
+          throw new Error('Server response error');
         }
         return response.json();
-    })
-    .then(data => {
+      })
+      .then(data => {
         if (data.error) {
-            console.error('Errore dal backend:', data.error);
+          console.error('Backend error:', data.error);
         } else {
-            this.reviews.unshift({
-                email: this.email,
-                text: this.reviewText,
-                rating: this.userRating,
-                create_date: new Date().toISOString()
-            });
-            this.reviewText = '';
-            this.userRating = 0;
-            this.email = '';
-            this.submitted = true;
+          this.reviews.unshift({
+            email: this.email,
+            text: this.reviewText,
+            rating: this.userRating,
+            create_date: new Date().toISOString()
+          });
+          this.reviewText = '';
+          this.userRating = 0;
+          this.email = '';
+          this.submitted = true;
         }
-    })
-    .catch(error => {
-        console.error('Errore nel recupero delle recensioni o nel submit:', error);
-    });
-},  
-    // Metodo per caricare le recensioni dal backend
+      })
+      .catch(error => {
+        console.error('Error submitting or retrieving reviews:', error);
+      });
+    },
+    // Method to load reviews from the backend
     fetchReviews() {
-        fetch(`http://localhost/netflix_php/get/reviews?id_film=${this.movie.id_meta}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(text => {
-                console.log("Risposta dal backend:", text); // Debugging
-                if (!text.trim()) { // Se il testo è vuoto
-                    console.warn("Nessuna recensione trovata.");
-                    this.reviews = [];
-                    return;
-                }
-                let data;
-                try {
-                    data = JSON.parse(text);
-                } catch (error) {
-                    console.error("Errore nel parsing JSON:", error);
-                    this.reviews = [];
-                    return;
-                }
-                if (data.message === "No reviews") {
-                    this.reviews = [];
-                } else {
-                    this.reviews = Array.isArray(data) ? data : [];
-                }
-            })
-            .catch(error => {
-                console.error('Errore nel recupero delle recensioni:', error);
-                this.reviews = [];
-            });
+      fetch(`http://localhost/netflix_php/get_reviews/${this.movie.id_meta}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Backend response:", data); // Debugging
+          if (!data || data.message === "No reviews") {
+            console.warn("No reviews found.");
+            this.reviews = [];
+          } else {
+            this.reviews = Array.isArray(data) ? data : [];
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching reviews:', error);
+          this.reviewsError = 'There was an error fetching reviews.';
+        });
     }
-},
-mounted() {
+  },
+  mounted() {
     if (!this.id_meta) {
-        console.error("id_meta non è definito");
-        return;
+      console.error("id_meta is not defined");
+      return;
     }
     this.getMovies();
-}
+  }
 };
-
 </script>
+
 
 
 <style scoped>

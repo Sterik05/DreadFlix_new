@@ -1,8 +1,5 @@
 <template>
   <nav>
-    <router-link to="/movies">
-      <h1 class="reload">DREAD FLIX</h1>
-    </router-link>
     <nav>
       <ul class="navbar">
         <li class="logo1">
@@ -27,11 +24,15 @@
               />
             </div>
           </transition>
+
           <select v-model="currentLanguage" @change="changeLanguage" class="language-select language-select-btn">
             <option value="en">English</option>
             <option value="it">Italiano</option>
           </select>
         </li>
+        <!-- <router-link class="reload" to="/movies">
+      <h1 >DREAD FLIX</h1>
+    </router-link> -->
         <li class="nav-buttons">
           <router-link to="/movies" class="nav-button">
             <button>{{ $t('movies') }}</button>
