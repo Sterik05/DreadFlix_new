@@ -57,80 +57,163 @@
 <script>
 export default {
   data() {
-      return {
-          movies: [],
-          movie: null,
-          reviewText: '',
-          email: '', 
-          submitted: false,
-          userRating: 0, 
-          tempRating: 0,
-          reviews: [] 
-      };
+    return {
+      movies: [],
+      movie: null,
+      reviewText: '',
+      email: '',
+      submitted: false,
+      userRating: 0,
+      tempRating: 0,
+      reviews: []
+    };
   },
   props: {
-      id: { type: String, required: true },
-      currentLanguage: { type: String, default: 'en' } // Aggiungi la prop per la lingua
+    id_meta: { type: String, required: true },
+    currentLanguage: { type: String, default: 'en' }
   },
   methods: {
-      getMovies() {
-          const options = {
-              method: 'GET',
-              headers: {
-                  accept: 'application/json',
-                  Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MzQ2NGZlNjdjYTQ1YWE0MDg1Y2QxMzA0OTk5Yjc5MyIsIm5iZiI6MTY5MDk2MjA5NC40Njg5OTk5LCJzdWIiOiI2NGNhMDhhZWRkODNmYTAwYWRiNGI0ZDAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.FJef0RjOXu5g5Ff7Vi3DpvtxmDxZKpdDVl_z-pliYXY'
-              }
-          };
+    getMovies() {
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        }
+      };
 
-          fetch(`https://api.themoviedb.org/3/movie/popular?language=${this.currentLanguage}&page=1`, options)
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                  }
-                  return response.json();
-              })
-              .then(data => {
-                  this.movies = data.results;
-                  this.setMovie();
-              })
-              .catch(error => {
-                  console.error('There was a problem with the fetch operation:', error);
-              });
-      },
-      setMovie() {
-          this.movie = this.movies.find(movie => movie.id === Number(this.id));
-      },
-      setRating(star) {
-          this.userRating = star;
-          this.tempRating = 0;
-      },
-      hoverRating(star) {
-          this.tempRating = star;
-      },
-      resetRating() {
-          this.tempRating = 0;
-      },
-      submitReview() {
-          if (this.reviewText.trim() !== '' && this.email.trim() !== '') {
-              const newReview = {
-                  email: this.email,
-                  text: this.reviewText,
-                  rating: this.userRating
-              };
-              this.reviews.push(newReview);
-              console.log('Review submitted:', newReview);
-              this.submitted = true;
-              this.reviewText = '';
-              this.email = '';
-              this.userRating = 0;
+      fetch(`http://localhost/netflix_php/read/movie?id_meta=${this.id_meta}&language=${this.currentLanguage}`, options)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
           }
+          return response.json();
+        })
+        .then(data => {
+          this.movies = data.results;
+          this.setMovie();
+          this.fetchReviews();  // Carica le recensioni quando il film è caricato
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    },
+    setMovie() {
+      if (!Array.isArray(this.movies)) {
+          console.error("this.movies non è un array");
+          return;
       }
-  },
-  mounted() {
-      this.getMovies();
-  }
+      this.movie = this.movies.find(movie => movie.id_meta === Number(this.id_meta));
+      if (!this.movie) {
+          console.error("Film non trovato con id_meta:", this.id_meta);
+      } else {
+          this.fetchReviews(); // Chiamata a fetchReviews solo se il film è stato trovato
+      }
+    },
+    setRating(star) {
+      this.userRating = star;
+      this.tempRating = 0;
+    },
+    hoverRating(star) {
+      this.tempRating = star;
+    },
+    resetRating() {
+      this.tempRating = 0;
+    },
+    // Codice per inviare la review
+    submitReview() {
+    console.log("Invio recensione:", {
+        id_film: this.movie.id_meta,
+        email: this.email,
+        text: this.reviewText,
+        rating: this.userRating
+    });
+
+    fetch(`http://localhost/netflix_php/create/review`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_film: this.movie.id_meta,
+            email: this.email,
+            text: this.reviewText,
+            rating: this.userRating
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Errore nella risposta del server');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error('Errore dal backend:', data.error);
+        } else {
+            this.reviews.unshift({
+                email: this.email,
+                text: this.reviewText,
+                rating: this.userRating,
+                create_date: new Date().toISOString()
+            });
+            this.reviewText = '';
+            this.userRating = 0;
+            this.email = '';
+            this.submitted = true;
+        }
+    })
+    .catch(error => {
+        console.error('Errore nel recupero delle recensioni o nel submit:', error);
+    });
+},  
+    // Metodo per caricare le recensioni dal backend
+    fetchReviews() {
+        fetch(`http://localhost/netflix_php/get/reviews?id_film=${this.movie.id_meta}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(text => {
+                console.log("Risposta dal backend:", text); // Debugging
+                if (!text.trim()) { // Se il testo è vuoto
+                    console.warn("Nessuna recensione trovata.");
+                    this.reviews = [];
+                    return;
+                }
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (error) {
+                    console.error("Errore nel parsing JSON:", error);
+                    this.reviews = [];
+                    return;
+                }
+                if (data.message === "No reviews") {
+                    this.reviews = [];
+                } else {
+                    this.reviews = Array.isArray(data) ? data : [];
+                }
+            })
+            .catch(error => {
+                console.error('Errore nel recupero delle recensioni:', error);
+                this.reviews = [];
+            });
+    }
+},
+mounted() {
+    if (!this.id_meta) {
+        console.error("id_meta non è definito");
+        return;
+    }
+    this.getMovies();
 }
+};
+
 </script>
+
+
 <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 

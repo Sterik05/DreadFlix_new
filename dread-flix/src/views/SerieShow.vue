@@ -9,7 +9,7 @@
           <div class="serie-info">
               <p class="serie-description">{{ serie.overview }}</p>
               <p><strong>{{ $t( 'originalLanguage' ) }}:</strong> {{ serie.original_language }}</p>
-              <p><strong>{{ $t( 'Data di uscita' ) }}:</strong> {{ serie.first_air_date }}</p>
+              <p><strong>{{ $t( 'releaseDate' ) }}:</strong> {{ serie.first_air_date }}</p>
               <p><strong>{{ $t( 'rating' ) }}:</strong> {{ serie.vote_average }}</p>
               <!-- Elemento per il rating -->
               <div class="star-rating">
@@ -63,7 +63,7 @@ export default {
       };
   },
   props: {
-      id: { type: String, required: true },
+      id_meta: { type: String, required: true },
       currentLanguage: { type: String, default: 'en' } // Aggiungi la prop per la lingua
   },
   methods: {
@@ -72,12 +72,11 @@ export default {
               method: 'GET',
               headers: {
                   accept: 'application/json',
-                  Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MzQ2NGZlNjdjYTQ1YWE0MDg1Y2QxMzA0OTk5Yjc5MyIsIm5iZiI6MTY5MDk2MjA5NC40Njg5OTk5LCJzdWIiOiI2NGNhMDhhZWRkODNmYTAwYWRiNGI0ZDAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.FJef0RjOXu5g5Ff7Vi3DpvtxmDxZKpdDVl_z-pliYXY',
+                  //Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MzQ2NGZlNjdjYTQ1YWE0MDg1Y2QxMzA0OTk5Yjc5MyIsIm5iZiI6MTY5MDk2MjA5NC40Njg5OTk5LCJzdWIiOiI2NGNhMDhhZWRkODNmYTAwYWRiNGI0ZDAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.FJef0RjOXu5g5Ff7Vi3DpvtxmDxZKpdDVl_z-pliYXY',
               },
           };
 
-          fetch(`https://api.themoviedb.org/3/tv/${this.id}?language=${this.currentLanguage}`, options)
-              .then(response => {
+          fetch(`http://localhost/netflix_php/read_single/tv?id_meta=${this.id_meta}&language=${this.currentLanguage}`, options)              .then(response => {
                   if (!response.ok) {
                       throw new Error('Network response was not ok');
                   }

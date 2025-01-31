@@ -10,8 +10,8 @@ const routes=[
     },  
     {path: '/movies', name: 'Movies', component: ()=>import('@/views/Home.vue')},
     {path: '/series', name: 'Series', component: ()=>import('@/views/HomeSerie.vue')},
-    {path: '/serie/:id', name: 'SerieShow', component: ()=>import('@/views/SerieShow.vue'), props: true},
-    {path: '/movie/:id', name: 'MovieShow', component: ()=>import('@/views/MovieShow.vue'), props: true},
+    {path: '/serie/:id_meta', name: 'SerieShow', component: ()=>import('@/views/SerieShow.vue'), props: true},
+    {path: '/movie/:id_meta', name: 'MovieShow', component: ()=>import('@/views/MovieShow.vue'), props: true},
 ]
  
 

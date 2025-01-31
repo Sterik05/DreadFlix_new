@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="`/serie/${serie.id}`" class="card-link">
+    <router-link :to="`/serie/${serie.id_meta}`" class="card-link">
       <div class="card">
         <img class="image" :src="`https://image.tmdb.org/t/p/w500${serie.poster_path}`" :alt="serie.title" :title="serie.original_title">
         <div class="card-content">
